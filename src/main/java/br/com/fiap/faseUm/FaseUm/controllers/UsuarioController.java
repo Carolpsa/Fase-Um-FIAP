@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
 import br.com.fiap.faseUm.FaseUm.services.UsuarioService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -55,7 +56,7 @@ public class UsuarioController {
 
    @PostMapping
    public ResponseEntity<Void> saveUsuario(
-           @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
         logger.info("POST -> /usuarios");
         this.usuarioService.saveUsuario(usuarioRequestDTO);
@@ -65,7 +66,7 @@ public class UsuarioController {
    @PutMapping("/{id}")
    public ResponseEntity<Void> updateUsuario(
            @PathVariable("id") Long id,
-           @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
        logger.info("PUT -> /usuarios/"+ id);
        this.usuarioService.updateUsuario(usuarioRequestDTO, id);
@@ -76,7 +77,7 @@ public class UsuarioController {
    @PatchMapping("/{id}/senha")
    public ResponseEntity<Void> updateSenhaUsuario(
            @PathVariable("id") Long id,
-           @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
        logger.info("PATCH -> /usuarios/"+ id + "senha do usuario");
        this.usuarioService.updateSenhaUsuario(usuarioRequestDTO, id);
