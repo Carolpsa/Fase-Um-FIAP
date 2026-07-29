@@ -10,6 +10,7 @@ import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
 import br.com.fiap.faseUm.FaseUm.repositories.UsuarioRepository;
+import br.com.fiap.faseUm.FaseUm.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UsuarioService {
@@ -27,7 +28,8 @@ public class UsuarioService {
     }
     
     public Optional<UsuarioResponseDTO> findUsuarioById(Long id) {
-        return this.usuarioRepository.findById(id).map(this::response);
+        return Optional.ofNullable(this.usuarioRepository.findById(id).map(this::response).orElseThrow(()-> new ResourceNotFoundException("Usuario nao encontrado")));
+        
     }
 
     public void saveUsuario(UsuarioRequestDTO usuarioRequestDTO) {
