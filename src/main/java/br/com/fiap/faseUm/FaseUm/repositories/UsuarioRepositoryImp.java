@@ -38,7 +38,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("nome", usuario.getNome())
         .param("email", usuario.getEmail())
         .param("login", usuario.getLogin())
-        .param("senha", passwordEncoder.encode(usuario.getSenha()))
+        .param("senha", usuario.getSenha())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
         .param("tipo_cadastro", usuario.getTipoCadastro().name())

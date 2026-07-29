@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
@@ -34,32 +33,41 @@ public class UsuarioService {
 
     public void saveUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
-        Assert.state(optional.isEmpty(), "Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+        if(optional.isPresent()){
+            throw new ResourceNotFoundException("E-mail ja cadastrado");
+        }
         var usuario = this.usuarioRequest(usuarioRequestDTO);
         var save = this.usuarioRepository.save(usuario);
-        Assert.state(save == 1, "Erro ao salvar usuario " + usuarioRequestDTO.nome());
-
+        if(save == 0){
+            throw new ResourceNotFoundException("Erro ao salvar usuario " + usuarioRequestDTO.nome());
+        }
     }
 
     public void updateUsuario(UsuarioRequestDTO usuarioRequestDTO, Long id) {
         var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
-        Assert.state(optional.isEmpty() || optional.get().getId().equals(id), "Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+        if(optional.isPresent() && !optional.get().getId().equals(id)){
+            throw new ResourceNotFoundException("Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+        }
         var usuario = this.usuarioRequest(usuarioRequestDTO);
         var update = this.usuarioRepository.update(usuario, id);
-        Assert.state(update == 0, "Usuario não encontrado");
+        if(update == 0){
+            throw new ResourceNotFoundException("Usuario não encontrado");
+        }
     }
 
     public void updateSenhaUsuario(UsuarioRequestDTO usuarioRequestDTO, Long id) {
         var usuario = this.usuarioRequest(usuarioRequestDTO);
         var update = this.usuarioRepository.updateSenhaUsuario(usuario, id);
-        Assert.state(update == 0, "Usuario não encontrado");
-        
+        if(update == 0){
+            throw new ResourceNotFoundException("Usuario não encontrado");
+        } 
     }
 
     public void delete(Long id) {
         var delete = this.usuarioRepository.delete(id);
-        Assert.state(delete == 0, "Usuario não encontrado");
-        
+        if(delete == 0){
+            throw new ResourceNotFoundException("Usuario não encontrado");
+        }    
     }
 
     public List<UsuarioResponseDTO> findUsuarioByName(String nome, int page, int size) {
@@ -85,6 +93,7 @@ public class UsuarioService {
             usuarioRequest.setNome(usuarioRequestDTO.nome());
             usuarioRequest.setEmail(usuarioRequestDTO.email());
             usuarioRequest.setLogin(usuarioRequestDTO.login());
+            usuarioRequest.setSenha(usuarioRequestDTO.senha());
             usuarioRequest.setEnderecoId(usuarioRequestDTO.enderecoId());
             usuarioRequest.setTipoCadastro(usuarioRequestDTO.tipoCadastro());
             return usuarioRequest;
