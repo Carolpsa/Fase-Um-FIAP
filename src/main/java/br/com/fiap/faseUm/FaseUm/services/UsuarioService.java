@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
 import br.com.fiap.faseUm.FaseUm.repositories.UsuarioRepository;
 
@@ -17,50 +19,75 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<Usuario> findAllUsuarios(int page, int size) {
+    public List<UsuarioResponseDTO> findAllUsuarios(int page, int size) {
         int offset = (page - 1) * size;
-        return this.usuarioRepository.findAll(size, offset);
+        List<Usuario> usuarios = this.usuarioRepository.findAll(size, offset);
+        return usuarios.stream().map(this::response).toList();
+
+    }
+    
+    public Optional<UsuarioResponseDTO> findUsuarioById(Long id) {
+        return this.usuarioRepository.findById(id).map(this::response);
     }
 
-    public Optional<Usuario> findUsuarioById(Long id) {
-        return this.usuarioRepository.findById(id);
-    }
-
-    public void saveUsuario(Usuario usuario) {
-        var optional = this.usuarioRepository.findByEmail(usuario.getEmail());
-        Assert.state(optional.isEmpty(), "Este e-mail ja esta cadastrado: " + usuario.getEmail());
+    public void saveUsuario(UsuarioRequestDTO usuarioRequestDTO) {
+        var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
+        Assert.state(optional.isEmpty(), "Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+        var usuario = this.usuarioRequest(usuarioRequestDTO);
         var save = this.usuarioRepository.save(usuario);
-        Assert.state(save == 1, "Erro ao salvar usuario " + usuario.getNome());
+        Assert.state(save == 1, "Erro ao salvar usuario " + usuarioRequestDTO.nome());
 
     }
 
-
-    public void updateUsuario(Usuario usuario, Long id) {
-        var optional = this.usuarioRepository.findByEmail(usuario.getEmail());
-        Assert.state(optional.isEmpty() || optional.get().getId().equals(id), "Este e-mail ja esta cadastrado: " + usuario.getEmail());
+    public void updateUsuario(UsuarioRequestDTO usuarioRequestDTO, Long id) {
+        var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
+        Assert.state(optional.isEmpty() || optional.get().getId().equals(id), "Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+        var usuario = this.usuarioRequest(usuarioRequestDTO);
         var update = this.usuarioRepository.update(usuario, id);
-        if(update == 0 ) {
-            throw new RuntimeException("Usuario não encontrado");
-        }
+        Assert.state(update == 0, "Usuario não encontrado");
     }
 
-    public void updateSenhaUsuario(Usuario usuario, Long id) {
+    public void updateSenhaUsuario(UsuarioRequestDTO usuarioRequestDTO, Long id) {
+        var usuario = this.usuarioRequest(usuarioRequestDTO);
         var update = this.usuarioRepository.updateSenhaUsuario(usuario, id);
-        if(update == 0 ) {
-            throw new RuntimeException("Usuario não encontrado");
-        }
+        Assert.state(update == 0, "Usuario não encontrado");
+        
     }
 
     public void delete(Long id) {
         var delete = this.usuarioRepository.delete(id);
-        if(delete == 0 ) {
-            throw new RuntimeException("Usuario não encontrado");
-        }
+        Assert.state(delete == 0, "Usuario não encontrado");
+        
     }
 
-    public List<Usuario> findUsuarioByName(String nome, int page, int size) {
+    public List<UsuarioResponseDTO> findUsuarioByName(String nome, int page, int size) {
         int offset = (page - 1) * size;
-        return this.usuarioRepository.findByName(nome, size, offset);
+        return this.usuarioRepository.findByName(nome, size, offset).stream().map(this::response).toList();
     }
+
+    private UsuarioResponseDTO response(Usuario usuario){
+        return new UsuarioResponseDTO(
+            usuario.getId(),
+            usuario.getNome(),
+            usuario.getEmail(),
+            usuario.getLogin(),
+            usuario.getDataAlteracao(),
+            usuario.getEnderecoId(),
+            usuario.getTipoCadastro()
+            
+        );
+    }
+
+    private Usuario usuarioRequest (UsuarioRequestDTO usuarioRequestDTO){
+        var usuarioRequest = new Usuario();
+            usuarioRequest.setNome(usuarioRequestDTO.nome());
+            usuarioRequest.setEmail(usuarioRequestDTO.email());
+            usuarioRequest.setLogin(usuarioRequestDTO.login());
+            usuarioRequest.setEnderecoId(usuarioRequestDTO.enderecoId());
+            usuarioRequest.setTipoCadastro(usuarioRequestDTO.tipoCadastro());
+            return usuarioRequest;
+            
+    }
+
 
 }

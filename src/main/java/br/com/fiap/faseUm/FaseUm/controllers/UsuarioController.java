@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.faseUm.FaseUm.entities.Usuario;
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
 import br.com.fiap.faseUm.FaseUm.services.UsuarioService;
 
 @RestController
@@ -33,7 +34,7 @@ public class UsuarioController {
     }
 
    @GetMapping
-    public ResponseEntity<List<Usuario>> findAllUsuarios(
+    public ResponseEntity<List<UsuarioResponseDTO>> findAllUsuarios(
             @RequestParam("page") int page,
             @RequestParam("size") int size
    ) {
@@ -44,7 +45,7 @@ public class UsuarioController {
 
 
    @GetMapping("/{id}")
-   public ResponseEntity<Optional<Usuario>> findUsuario(
+   public ResponseEntity<Optional<UsuarioResponseDTO>> findUsuario(
            @PathVariable("id") Long id
     ) {
         logger.info("/usuarios/"+ id);
@@ -54,20 +55,20 @@ public class UsuarioController {
 
    @PostMapping
    public ResponseEntity<Void> saveUsuario(
-           @RequestBody Usuario usuario
+           @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
         logger.info("POST -> /usuarios");
-        this.usuarioService.saveUsuario(usuario);
+        this.usuarioService.saveUsuario(usuarioRequestDTO);
         return ResponseEntity.status(201).build();
    }
 
    @PutMapping("/{id}")
    public ResponseEntity<Void> updateUsuario(
            @PathVariable("id") Long id,
-           @RequestBody Usuario usuario
+           @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
        logger.info("PUT -> /usuarios/"+ id);
-       this.usuarioService.updateUsuario(usuario, id);
+       this.usuarioService.updateUsuario(usuarioRequestDTO, id);
        var status = HttpStatus.NO_CONTENT;
        return ResponseEntity.status(status.value()).build();
    }
@@ -75,10 +76,10 @@ public class UsuarioController {
    @PatchMapping("/{id}/senha")
    public ResponseEntity<Void> updateSenhaUsuario(
            @PathVariable("id") Long id,
-           @RequestBody Usuario usuario
+           @RequestBody UsuarioRequestDTO usuarioRequestDTO
    ) {
        logger.info("PATCH -> /usuarios/"+ id + "senha do usuario");
-       this.usuarioService.updateSenhaUsuario(usuario, id);
+       this.usuarioService.updateSenhaUsuario(usuarioRequestDTO, id);
        var status = HttpStatus.NO_CONTENT;
        return ResponseEntity.status(status.value()).build();
    }
@@ -93,7 +94,7 @@ public class UsuarioController {
    }
 
    @GetMapping("/usuarios/nome")
-    public ResponseEntity<List<Usuario>> findUsuarioByName(
+    public ResponseEntity<List<UsuarioResponseDTO>> findUsuarioByName(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("nome") String nome

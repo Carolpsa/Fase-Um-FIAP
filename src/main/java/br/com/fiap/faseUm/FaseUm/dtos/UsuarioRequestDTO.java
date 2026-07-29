@@ -11,7 +11,7 @@ public record UsuarioRequestDTO(
     
     String senha, 
     
-    String enderecoId, 
+    Long enderecoId, 
     
     TipoCadastro tipoCadastro) {
 
