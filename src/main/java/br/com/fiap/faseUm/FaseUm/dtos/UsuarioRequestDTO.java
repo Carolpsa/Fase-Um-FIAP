@@ -1,6 +1,5 @@
 package br.com.fiap.faseUm.FaseUm.dtos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +21,7 @@ public record UsuarioRequestDTO(
     @NotNull(message="O id endereco do usuario nao pode ser nulo.")
     Long enderecoId, 
     
-    @NotNull(message="O tipo de cadastro do usuario deve ser DONO, DONA ou CLIENTE.")
+    @NotNull(message="A role do usuario esta incorreta.")
     List<String> role 
 )  {
 
