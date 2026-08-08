@@ -83,8 +83,7 @@ public class UsuarioService {
             usuario.getLogin(),
             usuario.getDataAlteracao(),
             usuario.getEnderecoId(),
-            usuario.getTipoCadastro()
-            
+            usuario.getRole()
         );
     }
 
@@ -95,7 +94,7 @@ public class UsuarioService {
             usuarioRequest.setLogin(usuarioRequestDTO.login());
             usuarioRequest.setSenha(usuarioRequestDTO.senha());
             usuarioRequest.setEnderecoId(usuarioRequestDTO.enderecoId());
-            usuarioRequest.setTipoCadastro(usuarioRequestDTO.tipoCadastro());
+            usuarioRequest.setRole(usuarioRequestDTO.role());
             return usuarioRequest;
             
     }

@@ -1,6 +1,9 @@
 package br.com.fiap.faseUm.FaseUm.dtos;
 
-import br.com.fiap.faseUm.FaseUm.entities.TipoCadastro;
+import java.util.ArrayList;
+import java.util.List;
+
+
 import jakarta.validation.constraints.NotNull;
 
 public record UsuarioRequestDTO(
@@ -19,7 +22,8 @@ public record UsuarioRequestDTO(
     @NotNull(message="O id endereco do usuario nao pode ser nulo.")
     Long enderecoId, 
     
-    @NotNull(message="O tipo de cadastro do usuario so pode ser DONO, DONA e CLIENTE.")
-    TipoCadastro tipoCadastro) {
+    @NotNull(message="O tipo de cadastro do usuario deve ser DONO, DONA ou CLIENTE.")
+    List<String> role 
+)  {
 
 }

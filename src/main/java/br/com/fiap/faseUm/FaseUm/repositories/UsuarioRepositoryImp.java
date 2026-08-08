@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
@@ -14,11 +13,9 @@ import br.com.fiap.faseUm.FaseUm.entities.Usuario;
 public class UsuarioRepositoryImp implements UsuarioRepository{
 
     private final JdbcClient jdbcClient;
-    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioRepositoryImp(JdbcClient jdbcClient, PasswordEncoder passwordEncoder){
+    public UsuarioRepositoryImp(JdbcClient jdbcClient){
         this.jdbcClient = jdbcClient;
-        this.passwordEncoder = passwordEncoder;
     }
     
     
@@ -41,7 +38,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("senha", usuario.getSenha())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("tipo_cadastro", usuario.getTipoCadastro().name())
+        .param("tipo_cadastro", usuario.getRole())
         .update();
     }
 
@@ -54,7 +51,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("login", usuario.getLogin())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("tipo_cadastro", usuario.getTipoCadastro().name())
+        .param("tipo_cadastro", usuario.getRole())
         .update();
     }
 
@@ -62,7 +59,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
     public Integer updateSenhaUsuario(Usuario usuario, Long id) {
         return this.jdbcClient.sql("UPDATE usuarios SET senha = :senha, data_alteracao = :data_alteracao WHERE id = :id")
         .param("id", id)
-        .param("senha", passwordEncoder.encode(usuario.getSenha()))
+        .param("senha", usuario.getSenha())
         .param("data_alteracao", LocalDate.now())
         .update();
     }

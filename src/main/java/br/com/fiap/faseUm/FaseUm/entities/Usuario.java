@@ -1,6 +1,8 @@
 package br.com.fiap.faseUm.FaseUm.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -23,5 +25,5 @@ public class Usuario {
     private String senha;
     private Date dataAlteracao;
     private Long enderecoId;
-    private TipoCadastro tipoCadastro;
+    private List<String> role =  new ArrayList<>();
 }

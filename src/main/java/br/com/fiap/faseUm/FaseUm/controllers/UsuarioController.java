@@ -44,7 +44,6 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
    }
 
-
    @GetMapping("/{id}")
    public ResponseEntity<Optional<UsuarioResponseDTO>> findUsuario(
            @PathVariable("id") Long id
