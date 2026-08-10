@@ -1,17 +1,8 @@
 package br.com.fiap.faseUm.FaseUm.services;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
@@ -19,7 +10,7 @@ import br.com.fiap.faseUm.FaseUm.repositories.UsuarioRepository;
 import br.com.fiap.faseUm.FaseUm.services.exceptions.ResourceNotFoundException;
 
 @Service
-public class UsuarioService implements UserDetailsService{
+public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository) {
@@ -90,7 +81,8 @@ public class UsuarioService implements UserDetailsService{
             usuario.getLogin(),
             usuario.getDataAlteracao(),
             usuario.getEnderecoId(),
-            usuario.getRole()
+            usuario.getRole(),
+            usuario.getEnabled()
         );
     }
 
@@ -104,17 +96,6 @@ public class UsuarioService implements UserDetailsService{
             usuarioRequest.setRole(usuarioRequestDTO.role());
             return usuarioRequest;
             
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String nome) throws UsernameNotFoundException {
-        var user= this.usuarioRepository.findByName(nome).orElseThrow(()-> new ResourceNotFoundException("Usuario nao encontrado"));
-        Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-        user.getRole().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-        });
-        UserDetails novoUser = new org.springframework.security.core.userdetails.User(user.getNome(), user.getSenha(), authorities);
-        return novoUser;
     }
 
     

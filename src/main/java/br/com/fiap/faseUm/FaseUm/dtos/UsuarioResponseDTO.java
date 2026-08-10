@@ -1,7 +1,8 @@
 package br.com.fiap.faseUm.FaseUm.dtos;
 
 import java.util.Date;
-import java.util.List;
+
+import br.com.fiap.faseUm.FaseUm.entities.Role;
 
 
 public record UsuarioResponseDTO(
@@ -18,7 +19,9 @@ public record UsuarioResponseDTO(
 
     Long enderecoId,
 
-    List<String> role 
+    Role role,
+    
+    Boolean enable
 
 ) {
     

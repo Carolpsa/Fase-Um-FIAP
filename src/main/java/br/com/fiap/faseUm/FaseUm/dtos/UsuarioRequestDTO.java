@@ -1,8 +1,6 @@
 package br.com.fiap.faseUm.FaseUm.dtos;
 
-import java.util.List;
-
-
+import br.com.fiap.faseUm.FaseUm.entities.Role;
 import jakarta.validation.constraints.NotNull;
 
 public record UsuarioRequestDTO(
@@ -22,7 +20,8 @@ public record UsuarioRequestDTO(
     Long enderecoId, 
     
     @NotNull(message="A role do usuario esta incorreta.")
-    List<String> role 
+    Role role
+    
 )  {
 
 }

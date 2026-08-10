@@ -15,7 +15,8 @@ CREATE TABLE usuarios (
     senha VARCHAR(255),
     data_alteracao DATE,
     endereco_id BIGINT,
-    tipo_cadastro VARCHAR(255),
+    role VARCHAR(255),
+    enabled BOOLEAN,
     FOREIGN KEY (endereco_id) REFERENCES enderecos(id)
 );
 

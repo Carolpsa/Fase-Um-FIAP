@@ -31,27 +31,29 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
 
     @Override
     public Integer save(Usuario usuario) {
-        return this.jdbcClient.sql("INSERT INTO usuarios (nome, email, login, senha, data_alteracao, endereco_id, tipo_cadastro) VALUES (:nome, :email, :login, :senha, :data_alteracao, :endereco_id, :tipo_cadastro)")
+        return this.jdbcClient.sql("INSERT INTO usuarios (nome, email, login, senha, data_alteracao, endereco_id, role, enabled) VALUES (:nome, :email, :login, :senha, :data_alteracao, :endereco_id, :role, :enabled)")
         .param("nome", usuario.getNome())
         .param("email", usuario.getEmail())
         .param("login", usuario.getLogin())
         .param("senha", usuario.getSenha())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("tipo_cadastro", usuario.getRole())
+        .param("role", usuario.getRole())
+        .param("enabled", true)
         .update();
     }
 
     @Override
     public Integer update(Usuario usuario, Long id) {
-        return this.jdbcClient.sql("UPDATE usuarios SET nome = :nome, email = :email, login = :login, data_alteracao = :data_alteracao, endereco_id = :endereco_id, tipo_cadastro = :tipo_cadastro WHERE id = :id")
+        return this.jdbcClient.sql("UPDATE usuarios SET nome = :nome, email = :email, login = :login, data_alteracao = :data_alteracao, endereco_id = :endereco_id, role = :role, enabled = :enabled WHERE id = :id")
         .param("id", id)
         .param("nome", usuario.getNome())
         .param("email", usuario.getEmail())
         .param("login", usuario.getLogin())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("tipo_cadastro", usuario.getRole())
+        .param("role", usuario.getRole())
+        .param("enabled", usuario.getEnabled())
         .update();
     }
 
@@ -86,15 +88,6 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
     public Optional<Usuario> findByEmail(String email) {
          return this.jdbcClient.sql("SELECT * FROM usuarios WHERE email = :email")
          .param("email", email)
-         .query(Usuario.class)
-         .optional();
-    }
-
-
-    @Override
-    public Optional<Usuario> findByName(String nome) {
-        return this.jdbcClient.sql("SELECT * FROM usuarios WHERE nome = :nome")
-         .param("nome", nome)
          .query(Usuario.class)
          .optional();
     }
