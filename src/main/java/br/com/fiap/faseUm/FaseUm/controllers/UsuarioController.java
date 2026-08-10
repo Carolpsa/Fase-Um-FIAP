@@ -34,7 +34,8 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-   @GetMapping
+   
+    @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> findAllUsuarios(
             @RequestParam("page") int page,
             @RequestParam("size") int size

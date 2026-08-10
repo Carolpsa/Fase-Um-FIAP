@@ -11,7 +11,9 @@ public interface UsuarioRepository {
 
     List<Usuario> findAll(int size, int offset);
 
-    List<Usuario> findByName(String name, int size, int offset);
+    List<Usuario> findByNameList(String name, int size, int offset);
+
+    Optional<Usuario> findByName(String name);
 
     Integer save(Usuario usuario); // integer porque retorna a quantidade de linhas modificadas
 

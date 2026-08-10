@@ -73,7 +73,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
 
 
     @Override
-    public List<Usuario> findByName(String nome, int size, int offset) {
+    public List<Usuario> findByNameList(String nome, int size, int offset) {
          return this.jdbcClient.sql("SELECT * FROM usuarios LIMIT :size OFFSET :offset nome :nome")
          .param("size", size)
          .param("offset", offset)
@@ -89,5 +89,15 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
          .query(Usuario.class)
          .optional();
     }
+
+
+    @Override
+    public Optional<Usuario> findByName(String nome) {
+        return this.jdbcClient.sql("SELECT * FROM usuarios WHERE nome = :nome")
+         .param("nome", nome)
+         .query(Usuario.class)
+         .optional();
+    }
+
 
 }
