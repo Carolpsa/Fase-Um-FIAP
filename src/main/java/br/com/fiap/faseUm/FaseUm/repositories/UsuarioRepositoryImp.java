@@ -43,7 +43,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("senha", this.passwordEncoder.encode(usuario.getSenha()))
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("role", usuario.getRole())
+        .param("role", usuario.getRole().name())
         .param("enabled", true)
         .update();
     }
@@ -57,7 +57,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("login", usuario.getLogin())
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
-        .param("role", usuario.getRole())
+        .param("role", usuario.getRole().name())
         .param("enabled", usuario.getEnabled())
         .update();
     }

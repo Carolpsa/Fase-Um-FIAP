@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                 .anyRequest().authenticated()
             )
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/usuarios"))
+            .csrf(csrf -> csrf.disable())
             .formLogin(Customizer.withDefaults())
             .logout(Customizer.withDefaults());
             return http.build();
