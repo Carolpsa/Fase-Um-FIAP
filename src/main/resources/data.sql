@@ -20,4 +20,4 @@ CREATE TABLE usuarios (
     FOREIGN KEY (endereco_id) REFERENCES enderecos(id)
 );
 
-INSERT INTO usuarios (nome, email, login) VALUES ('Carolina', 'carolpsa.unesp@gmail.com', 'carol.psa');
+INSERT INTO usuarios (nome, email, login, senha, role, enabled) VALUES ('Carolina', 'carolpsa.unesp@gmail.com', 'carol.psa', '$2a$10$xWm6mXDESWoI2wF17iCxO.muVxSy0tauKgPHeJdRY90ua79FwNvwS', 'DONO', true);

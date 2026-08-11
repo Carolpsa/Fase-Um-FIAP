@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
@@ -17,6 +19,9 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
     public UsuarioRepositoryImp(JdbcClient jdbcClient){
         this.jdbcClient = jdbcClient;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     
     @Override
@@ -35,7 +40,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         .param("nome", usuario.getNome())
         .param("email", usuario.getEmail())
         .param("login", usuario.getLogin())
-        .param("senha", usuario.getSenha())
+        .param("senha", this.passwordEncoder.encode(usuario.getSenha()))
         .param("data_alteracao", LocalDate.now())
         .param("endereco_id", usuario.getEnderecoId())
         .param("role", usuario.getRole())
@@ -61,7 +66,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
     public Integer updateSenhaUsuario(Usuario usuario, Long id) {
         return this.jdbcClient.sql("UPDATE usuarios SET senha = :senha, data_alteracao = :data_alteracao WHERE id = :id")
         .param("id", id)
-        .param("senha", usuario.getSenha())
+        .param("senha", this.passwordEncoder.encode(usuario.getSenha()))
         .param("data_alteracao", LocalDate.now())
         .update();
     }
