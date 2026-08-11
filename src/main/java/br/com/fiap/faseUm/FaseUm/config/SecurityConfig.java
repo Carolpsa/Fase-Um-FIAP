@@ -42,9 +42,10 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                 .anyRequest().authenticated()
             )
-            
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/usuarios"))
             .formLogin(Customizer.withDefaults())
             .logout(Customizer.withDefaults());
             return http.build();
