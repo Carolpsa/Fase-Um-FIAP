@@ -18,25 +18,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTO;
-import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTO;
-import br.com.fiap.faseUm.FaseUm.services.UsuarioService;
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTOV1;
+import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTOV1;
+import br.com.fiap.faseUm.FaseUm.services.UsuarioServiceV1;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
+@RequestMapping("/v1/usuarios")
+public class UsuarioControllerV1 {
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioControllerV1.class);
 
-    private final UsuarioService usuarioService;
+    private final UsuarioServiceV1 usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioControllerV1(UsuarioServiceV1 usuarioService) {
         this.usuarioService = usuarioService;
     }
 
    
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDTO>> findAllUsuarios(
+    public ResponseEntity<List<UsuarioResponseDTOV1>> findAllUsuarios(
             @RequestParam("page") int page,
             @RequestParam("size") int size
    ) {
@@ -46,7 +46,7 @@ public class UsuarioController {
    }
 
    @GetMapping("/{id}")
-   public ResponseEntity<Optional<UsuarioResponseDTO>> findUsuario(
+   public ResponseEntity<Optional<UsuarioResponseDTOV1>> findUsuario(
            @PathVariable("id") Long id
     ) {
         logger.info("/usuarios/"+ id);
@@ -56,7 +56,7 @@ public class UsuarioController {
 
    @PostMapping
    public ResponseEntity<Void> saveUsuario(
-           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTOV1 usuarioRequestDTO
    ) {
         logger.info("POST -> /usuarios");
         this.usuarioService.saveUsuario(usuarioRequestDTO);
@@ -66,7 +66,7 @@ public class UsuarioController {
    @PutMapping("/{id}")
    public ResponseEntity<Void> updateUsuario(
            @PathVariable("id") Long id,
-           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTOV1 usuarioRequestDTO
    ) {
        logger.info("PUT -> /usuarios/"+ id);
        this.usuarioService.updateUsuario(usuarioRequestDTO, id);
@@ -77,7 +77,7 @@ public class UsuarioController {
    @PatchMapping("/{id}/senha")
    public ResponseEntity<Void> updateSenhaUsuario(
            @PathVariable("id") Long id,
-           @Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO
+           @Valid @RequestBody UsuarioRequestDTOV1 usuarioRequestDTO
    ) {
        logger.info("PATCH -> /usuarios/"+ id + "senha do usuario");
        this.usuarioService.updateSenhaUsuario(usuarioRequestDTO, id);
@@ -95,7 +95,7 @@ public class UsuarioController {
    }
 
    @GetMapping("/usuarios/nome")
-    public ResponseEntity<List<UsuarioResponseDTO>> findUsuarioByName(
+    public ResponseEntity<List<UsuarioResponseDTOV1>> findUsuarioByName(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("nome") String nome

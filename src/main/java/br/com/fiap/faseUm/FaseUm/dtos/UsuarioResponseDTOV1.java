@@ -5,7 +5,7 @@ import java.util.Date;
 import br.com.fiap.faseUm.FaseUm.entities.Role;
 
 
-public record UsuarioResponseDTO(
+public record UsuarioResponseDTOV1(
     
     Long id,
 

@@ -3,9 +3,9 @@ package br.com.fiap.faseUm.FaseUm.dtos;
 import br.com.fiap.faseUm.FaseUm.entities.Role;
 import jakarta.validation.constraints.NotNull;
 
-public record UsuarioRequestDTO(
+public record UsuarioRequestDTOV2(
     @NotNull(message="O nome do usuario nao pode ser nulo.")
-    String nome, 
+    String nomeCompleto, 
     
     @NotNull(message="O email do usuario nao pode ser nulo.")
     String email, 
