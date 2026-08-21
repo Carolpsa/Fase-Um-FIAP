@@ -39,17 +39,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                .anyRequest().authenticated()
-            )
-            .csrf(csrf -> csrf.disable())
-            .formLogin(Customizer.withDefaults())
-            .logout(Customizer.withDefaults());
-            return http.build();
-    }
+    http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/login").permitAll()
+            .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+            .anyRequest().authenticated()
+        )
+        .csrf(csrf -> csrf.disable())
+        .formLogin(Customizer.withDefaults())
+        .logout(Customizer.withDefaults());
+        return http.build();
+}
 
    
 }
