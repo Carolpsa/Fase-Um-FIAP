@@ -18,22 +18,26 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ProblemDetail handlerResourceNotFoundException(ResourceNotFoundException e) {
+    public ProblemDetail handlerResourceNotFoundException(ResourceNotFoundException e, HttpServletRequest request) {
     ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     pd.setTitle("Resource not found");
     pd.setType(URI.create("https://faseum.fiap.com.br/errors/resource-not-found"));
+    pd.setInstance(URI.create(request.getRequestURI()));
     return pd;
 }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ProblemDetail handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ProblemDetail handlerMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
     ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
-    pd.setTitle("Validation error");
+    pd.setTitle("Erro de Validacao");
     Map<String, String> errors = new LinkedHashMap<>();
     for (var err : e.getBindingResult().getFieldErrors()) {
         errors.put(err.getField(), err.getDefaultMessage());
     }
-    pd.setProperty("errors", errors); 
+    pd.setProperty("errors", errors);
+    pd.setInstance(URI.create(request.getRequestURI()));
+    pd.setType(URI.create("https://faseum.fiap.com.br/erros/validacao"));
+    pd.setDetail("Um ou mais campos são inválidos");
     return pd;
 }
 
@@ -45,4 +49,13 @@ public class ControllerExceptionHandler {
     pd.setInstance(URI.create(request.getRequestURI()));
     return pd;
     }
+
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handlerGenericException(Exception e, HttpServletRequest request) {
+    ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado");
+    pd.setTitle("Erro interno");
+    pd.setType(URI.create("https://faseum.fiap.com.br/erros/erro-interno"));
+    pd.setInstance(URI.create(request.getRequestURI()));
+    return pd;
+}
 }
