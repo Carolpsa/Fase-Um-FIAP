@@ -22,4 +22,6 @@ CREATE TABLE usuarios (
 
 INSERT INTO enderecos (id, rua, numero, bairro, cep, cidade) VALUES (1, 'Uchoa', '393', 'Xavier', '14811238', 'Araraquara');
 
+INSERT INTO usuarios (id, nome, email, senha, endereco_id, role) VALUES (1, 'Carolina',  'carolpsa@gmail.com', '$2a$10$6eSVfWCW6MLhGHw5SxlTb.rCcdG931Qail0XIfSQ.3dWehytDFfZO', 1, 'DONO');
+
 
