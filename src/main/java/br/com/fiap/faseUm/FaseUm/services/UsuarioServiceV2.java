@@ -8,6 +8,7 @@ import br.com.fiap.faseUm.FaseUm.dtos.UsuarioRequestDTOV2;
 import br.com.fiap.faseUm.FaseUm.dtos.UsuarioResponseDTOV2;
 import br.com.fiap.faseUm.FaseUm.entities.Usuario;
 import br.com.fiap.faseUm.FaseUm.repositories.UsuarioRepository;
+import br.com.fiap.faseUm.FaseUm.services.exceptions.ResourceAlreadyExistsException;
 import br.com.fiap.faseUm.FaseUm.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -33,7 +34,7 @@ public class UsuarioServiceV2 {
     public void saveUsuario(UsuarioRequestDTOV2 usuarioRequestDTO) {
         var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
         if(optional.isPresent()){
-            throw new ResourceNotFoundException("E-mail ja cadastrado");
+            throw new ResourceAlreadyExistsException("E-mail ja cadastrado");
         }
         var usuario = this.usuarioRequest(usuarioRequestDTO);
         var save = this.usuarioRepository.save(usuario);
@@ -45,7 +46,7 @@ public class UsuarioServiceV2 {
     public void updateUsuario(UsuarioRequestDTOV2 usuarioRequestDTO, Long id) {
         var optional = this.usuarioRepository.findByEmail(usuarioRequestDTO.email());
         if(optional.isPresent() && !optional.get().getId().equals(id)){
-            throw new ResourceNotFoundException("Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
+            throw new ResourceAlreadyExistsException("Este e-mail ja esta cadastrado: " + usuarioRequestDTO.email());
         }
         var usuario = this.usuarioRequest(usuarioRequestDTO);
         var update = this.usuarioRepository.update(usuario, id);
