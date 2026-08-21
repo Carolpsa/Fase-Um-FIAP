@@ -17,6 +17,8 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -38,7 +40,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/login").permitAll()
@@ -46,7 +48,14 @@ public class SecurityConfig {
             .anyRequest().authenticated()
         )
         .csrf(csrf -> csrf.disable())
-        .formLogin(Customizer.withDefaults())
+        .formLogin(form -> form
+            .successHandler((request, response, authentication) -> {
+                response.setStatus(HttpServletResponse.SC_OK);
+            })
+            .failureHandler((request, response, exception) -> {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            })
+        )
         .logout(Customizer.withDefaults());
         return http.build();
 }
