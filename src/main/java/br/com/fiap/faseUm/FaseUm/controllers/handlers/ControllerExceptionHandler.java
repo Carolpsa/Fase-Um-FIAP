@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+
+     private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ProblemDetail handlerResourceNotFoundException(ResourceNotFoundException e, HttpServletRequest request) {
@@ -52,10 +56,11 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handlerGenericException(Exception e, HttpServletRequest request) {
-    ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado");
-    pd.setTitle("Erro interno");
-    pd.setType(URI.create("https://faseum.fiap.com.br/erros/erro-interno"));
-    pd.setInstance(URI.create(request.getRequestURI()));
-    return pd;
-}
+        logger.error("Erro interno inesperado", e); // <- linha nova, imprime o stack trace completo
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado");
+        pd.setTitle("Erro interno");
+        pd.setType(URI.create("https://faseum.fiap.com.br/erros/erro-interno"));
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
 }
