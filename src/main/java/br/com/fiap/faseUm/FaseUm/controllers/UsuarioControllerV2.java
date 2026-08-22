@@ -94,13 +94,13 @@ public class UsuarioControllerV2 {
        return ResponseEntity.ok().build();
    }
 
-   @GetMapping("/usuarios/nome")
+   @GetMapping("/nome")
     public ResponseEntity<List<UsuarioResponseDTOV2>> findUsuarioByName(
             @RequestParam("page") int page,
             @RequestParam("size") int size,
             @RequestParam("nomeCompleto") String nomeCompleto
    ) {
-        logger.info("/usuarios/nome");
+        logger.info("/nome");
         var nomeUsuarios = this.usuarioService.findUsuarioByName(nomeCompleto, page, size);
         return ResponseEntity.ok(nomeUsuarios);
    }
